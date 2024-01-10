@@ -5,13 +5,16 @@ volumes:
     grafana_data: {}
 
 networks:
-  front-tier:
+  host:
+  front-tier: 
   back-tier:
 
 services:
 
   prometheus:
     image: prom/prometheus:v2.36.2
+    labels:
+      - function=monitoring
     volumes:
       - ./prometheus/:/etc/prometheus/
       - prometheus_data:/prometheus
@@ -25,20 +28,16 @@ services:
     links:
       - cadvisor:cadvisor
       - alertmanager:alertmanager
-#      - pushgateway:pushgateway
     depends_on:
       - cadvisor
-#      - pushgateway
     networks:
       - back-tier
     restart: always
-#    deploy:
-#      placement:
-#        constraints:
-#          - node.hostname == ${HOSTNAME}
 
   node-exporter:
     image: quay.io/prometheus/node-exporter:latest
+    labels:
+      - function=monitoring
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
@@ -60,6 +59,8 @@ services:
 
   alertmanager:
     image: prom/alertmanager
+    labels:
+      - function=monitoring
     ports:
       - 9093:9093
     volumes:
@@ -70,12 +71,10 @@ services:
     command:
       - '--config.file=/etc/alertmanager/config.yml'
       - '--storage.path=/alertmanager'
-#    deploy:
-#      placement:
-#        constraints:
-#          - node.hostname == ${HOSTNAME}
   cadvisor:
     image: gcr.io/cadvisor/cadvisor
+    labels:
+      - function=monitoring
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:rw
@@ -91,6 +90,8 @@ services:
 
   grafana:
     image: grafana/grafana
+    labels:
+      - function=monitoring
     user: "472"
     depends_on:
       - prometheus
@@ -105,13 +106,3 @@ services:
       - back-tier
       - front-tier
     restart: always
-
-#  pushgateway:
-#    image: prom/pushgateway
-#    restart: always
-#    expose:
-#      - 9091
-#    ports:
-#      - "9091:9091"
-#    networks:
-#      - back-tier
