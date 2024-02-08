@@ -11,6 +11,8 @@ services:
 
   prometheus:
     image: prom/prometheus:v2.36.2
+    labels:
+      - function=monitoring
     volumes:
       - ./prometheus/:/etc/prometheus/
       - prometheus_data:/prometheus
@@ -37,6 +39,8 @@ services:
 
   node-exporter:
     image: quay.io/prometheus/node-exporter:latest
+    labels:
+      - function=monitoring
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
@@ -57,6 +61,8 @@ services:
 
   alertmanager:
     image: prom/alertmanager
+    labels:
+      - function=monitoring
     ports:
       - 9093:9093
     volumes:
@@ -75,6 +81,8 @@ services:
 
   cadvisor:
     image: gcr.io/cadvisor/cadvisor
+    labels:
+      - function=monitoring
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:rw
@@ -91,6 +99,8 @@ services:
 
   grafana:
     image: grafana/grafana
+    labels:
+      - function=monitoring
     depends_on:
       - prometheus
     ports:
