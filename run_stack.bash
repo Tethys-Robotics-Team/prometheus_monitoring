@@ -1,3 +1,3 @@
 #!/bin/bash
 
-HOSTNAME=$(hostname) docker stack deploy -c docker-stack.yml prom
+HOSTNAME=$(hostname) docker stack deploy -c docker-stack.yml monitor

@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker stack down prom
+docker stack down monitor
