@@ -12,7 +12,7 @@ networks:
 services:
 
   prometheus:
-    image: prom/prometheus:v2.36.2
+    image: prom/prometheus:latest
     labels:
       - function=monitoring
     volumes:
@@ -58,7 +58,7 @@ services:
       mode: global
 
   alertmanager:
-    image: prom/alertmanager
+    image: prom/alertmanager:latest
     labels:
       - function=monitoring
     ports:
@@ -71,8 +71,9 @@ services:
     command:
       - '--config.file=/etc/alertmanager/config.yml'
       - '--storage.path=/alertmanager'
+
   cadvisor:
-    image: gcr.io/cadvisor/cadvisor
+    image: gcr.io/cadvisor/cadvisor:latest
     labels:
       - function=monitoring
     volumes:
@@ -89,7 +90,7 @@ services:
       mode: global
 
   grafana:
-    image: grafana/grafana
+    image: grafana/grafana:latest
     labels:
       - function=monitoring
     user: "472"

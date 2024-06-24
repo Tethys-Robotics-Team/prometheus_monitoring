@@ -10,7 +10,7 @@ networks:
 services:
 
   prometheus:
-    image: prom/prometheus:v2.36.2
+    image: prom/prometheus:latest
     labels:
       - function=monitoring
     volumes:
@@ -60,7 +60,7 @@ services:
           condition: on-failure
 
   alertmanager:
-    image: prom/alertmanager
+    image: prom/alertmanager:latest
     labels:
       - function=monitoring
     ports:
@@ -80,7 +80,7 @@ services:
         condition: on-failure    
 
   cadvisor:
-    image: gcr.io/cadvisor/cadvisor
+    image: gcr.io/cadvisor/cadvisor:latest
     labels:
       - function=monitoring
     volumes:
@@ -98,7 +98,7 @@ services:
           condition: on-failure
 
   grafana:
-    image: grafana/grafana
+    image: grafana/grafana:latest
     labels:
       - function=monitoring
     depends_on:
@@ -121,7 +121,7 @@ services:
         condition: on-failure
 
 #  pushgateway:
-#    image: prom/pushgateway
+#    image: prom/pushgateway:latest
 #    deploy:
 #      mode: global
 #      restart_policy:
