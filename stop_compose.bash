@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker compose -p monitor_stack down
+docker compose -p monitor down
