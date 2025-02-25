@@ -27,26 +27,43 @@ Here's a quick start using Play-With-Docker (PWD) to start-up a [Prometheus](htt
 # Pre-requisites
 Before we get started installing the Prometheus stack. Ensure you install the latest version of docker and [docker swarm](https://docs.docker.com/engine/swarm/swarm-tutorial/) on your Docker host machine. Docker Swarm is installed automatically when using Docker for Mac or Docker for Windows.
 
+Additionally, we recommend to install Portainer as an additional overview of the running docker stacks and containers. To install this, use the following script as follows:
+
+	$ ./start_portainer.bash
+    
+The Portainer Dashboard will be accessible via: `http://<Host IP Address>:9000` for example http://192.168.10.1:9000 and will be needed to setup the first time you access it with a user name and password. 
+
 # Installation & Configuration
 Clone the project locally to your Docker host.
 
 If you would like to change which targets should be monitored or make configuration changes edit the [/prometheus/prometheus.yml](prometheus/prometheus.yml) file. The targets section is where you define what should be monitored by Prometheus. The names defined in this file are actually sourced from the service name in the docker-compose file. If you wish to change names of the services you can add the "container_name" parameter in the `docker-compose.yml` file.
 
-Once configurations are done let's start it up. From the /prometheus project directory run the following command:
-
-    $ HOSTNAME=$(hostname) docker stack deploy -c docker-stack.yml prom
-
-
-That's it the `docker stack deploy' command deploys the entire Grafana and Prometheus stack automagically to the Docker Swarm. By default cAdvisor and node-exporter are set to Global deployment which means they will propogate to every docker host attached to the Swarm.
-
-The Grafana Dashboard is now accessible via: `http://<Host IP Address>:3000` for example http://192.168.10.1:3000
+The Grafana Dashboard will be accessible via: `http://<Host IP Address>:3000` for example http://192.168.10.1:3000
 
 	username - admin
 	password - foobar (Password is stored in the `/grafana/config.monitoring` env file)
 
+## Compose installation
+
+Once configurations are done let's start it up. From the /prometheus project directory run the following command:
+
+    $ ./start_compose.bash
+
+That's it the `docker compose up' command deploys the entire Grafana and Prometheus stack automatically to Docker. By default cAdvisor and node-exporter are set to Global deployment which means they will propogate to every docker host attached to the Swarm.
+
+In order to check the status of the newly created stack, we recommend using portainer as stated in the Pre-requisites.
+
+## Stack installation
+
+Alternative, you can use the docker stack functions to let run the script. From the /prometheus project directory run the following command:
+
+    $ ./start_stack.bash
+
+That's it the `docker stack deploy' command deploys the entire Grafana and Prometheus stack automatically to the Docker Swarm. By default cAdvisor and node-exporter are set to Global deployment which means they will propogate to every docker host attached to the Swarm.
+
 In order to check the status of the newly created stack:
 
-    $ docker stack ps prom
+    $ docker stack ps monitor
 
 View running services:
 
@@ -54,7 +71,7 @@ View running services:
 
 View logs for a specific service
 
-    $ docker service logs prom_<service_name>
+    $ docker service logs monitor_<service_name>
 
 ## Add Datasources and Dashboards
 Grafana version 5.0.0 has introduced the concept of provisioning. This allows us to automate the process of adding Datasources & Dashboards. The `/grafana/provisioning/` directory contains the `datasources` and `dashboards` directories. These directories contain YAML files which allow us to specify which datasource or dashboards should be installed. 
